@@ -1,21 +1,22 @@
-<ion-view view-title="LED Control" ng-controller="LedsCtrl">
+<ion-view view-title="LED Control" ng-controller="LedsCtrl" ng-init="getSelectedLed()">
   	<ion-content>
-  		<p>Selected led: {{scope.selectedLed.id}}</p>
-  		<button ng-click="testi()">Test</button>
+  		<p>Selected led: {{selected.id}}</p>
+  		<ion-toggle ng-true-value="'ON'" ng-model="selected.status" ng-false-value="'OFF'" toggle-class="toggle-calm">Status</ion-toggle>
+  		<button ng-click="toggleLed()">Test</button>
 		<div class="list">
 			<div class="item range range-positive">
 		    	<i class="icon ion-ios-sunny-outline"></i>
-		    	<input type="range" name="red" min="0" max="100" value="33" ng-model="selectedLed.r">
+		    	<input type="range" name="red" min="0" max="255" ng-model="selected.r">
 		    	<i class="icon ion-ios-sunny"></i>
 		  	</div>
 		  	<div class="item range range-positive">
 		    	<i class="icon ion-ios-sunny-outline"></i>
-		    	<input type="range" name="green" min="0" max="100" value="33" ng-model="selectedLed.g">
+		    	<input type="range" name="green" min="0" max="255" ng-model="selected.g">
 		    	<i class="icon ion-ios-sunny"></i>
 		  	</div>
 		  	<div class="item range range-positive">
 		    	<i class="icon ion-ios-sunny-outline"></i>
-		    	<input type="range" name="blue" min="0" max="100" value="33" ng-model="selectedLed.b">
+		    	<input type="range" name="blue" min="0" max="255" ng-model="selected.b">
 		    	<i class="icon ion-ios-sunny"></i>
 		  	</div>
 		</div>

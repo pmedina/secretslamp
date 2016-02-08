@@ -13,38 +13,26 @@ angular.module('slamp.leds', ['ionic'])
 */
 .controller('LedsCtrl', function ($scope, $state, LedsFactory) {
 	
-	$scope._findLed = function(ledId){
-		
-	};
+	$scope.selected = null;
 
-	$scope.lampmodel = LedsFactory.GetModel();
-	console.debug()
-
-	$scope.toggle = function(ledId){
-
-
-	};
-
-	$scope.setRGB = function(ledId, r, g, b){
-
-		
-	};
-
-	$scope.test = function(ledId){
+	$scope.openLedControls = function(ledId){
 		$scope.lampModel = LedsFactory.GetModel();
-		console.debug($scope.lampModel);
 		LedsFactory.SelectLed(ledId);
-		//$scope.selectedLed.status = "ON";
+		$scope.selected = LedsFactory.GetSelectedLed();
 		$state.go('app.led');
 	}
 
-	$scope.testi = function(){
-		LedsFactory.ToggleLed();
+	$scope.toggleLed = function(){
+		$scope.selected.status = "ON";
 	}
 
 	$scope.btSend = function(){
 
 
+	}
+
+	$scope.getSelectedLed = function(){
+		$scope.selected = LedsFactory.GetSelectedLed();
 	}
 
 })

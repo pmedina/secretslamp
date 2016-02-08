@@ -75,17 +75,19 @@ angular.module('slamp.datafactory', ['ionic'])
 			}]
 		}
 		,selectedLed: null
+
 		,GetModel: function(){
 			return this.lampModel;
 		}
+		,GetSelectedLed: function(){
+			return this.selectedLed;
+		}
+
 		,SelectLed: function(ledId){
 			for(var i in this.lampModel.sides){
 				var side = this.lampModel.sides[i];
-				console.debug("SIDE: "+this.lampModel.sides[i].id);
 				for(var j in side.leds){
-					console.debug("LED "+side.leds[j].id)
 					if(side.leds[j].id == ledId){
-						console.debug("found:"+ledId);
 						this.selectedLed = side.leds[j];
 						break; 
 					}
@@ -94,14 +96,13 @@ angular.module('slamp.datafactory', ['ionic'])
 		}
 
 		,ToggleLedStatus: function(){
-			console.debug(this.selectedLed);
+			console.debug("Selected:"+this.selectedLed);
 			this.selectedLed.status = "ON";
-			console.debug(this.lampModel);
 		}
+
 		,ToggleLedRGB: function(color, value){
 			console.debug(this.selectedLed);
 			this.selectedLed.status = "ON";
-			console.debug(this.lampModel);
 		}
 	}
 
