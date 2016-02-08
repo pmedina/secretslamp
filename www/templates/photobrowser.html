@@ -1,0 +1,17 @@
+<ion-scroll class="has-header" ng-controller="FilesCtrl">
+	<div class="list card" style="margin-top: 50px;">
+		<div class="item item-avatar">
+			<h2>Your Image Secret</h2>
+		</div>
+
+		<div class="item item-image">
+			<img ng-src="{{photodata}}" style="width:100%; height: auto;min-height: 400px;">
+		</div>
+		<textarea>{{photodata}}</textarea>
+
+		<a class="item item-icon-left assertive">
+		<i class="icon ion-ios-camera"></i>
+			Take photo
+		</a>
+	</div>
+</ion-scroll>

@@ -1,0 +1,10 @@
+<ion-scroll class="has-header" ng-controller="FilesCtrl">
+<a ng-click=""><i ng-show="file.isDirectory" class="icon ion-arrow-left-a" style="margin-top: 50px;"></i>Back</a>
+<ion-list>
+  <ion-item ng-repeat="file in files" ng-click="OnFileClick(file)">
+     <i ng-show="file.isDirectory" class="icon ion-folder"></i>
+     <i ng-show="file.isFile" class="icon ion-document"></i>
+      {{file.name}}
+  </ion-item>
+</ion-list>
+</ion-scroll>
