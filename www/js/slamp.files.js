@@ -9,9 +9,8 @@ angular.module('slamp.files', ['ionic'])
 .run(function($ionicPlatform, $http) {
 
 	console.debug("run auth");
-	// TODO: Save auth in localstorage. Check ig not exists
+	// TODO: Temporary disabled to avoid pain at development. Save auth in localstorage. Check if not exists
 	return;
-
 	// Open in external browser
  	var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
 	ref.addEventListener('loadstart', function(event) { 
@@ -153,7 +152,7 @@ angular.module('slamp.files', ['ionic'])
 .factory('cameraService', function($q){
 	return{
 		GetPicture: function(src){
-			var source = src == 0 ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY
+			var source = src == 0 ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
 			var deferred = $q.defer();
 			navigator.camera.getPicture(
 				function(result) {
@@ -185,18 +184,25 @@ angular.module('slamp.files', ['ionic'])
 .factory('filesService', function($http, $q){
 	return{
 		GetFileEntryFromPath: function(path){
-			if(typeof(path) === "undefined")
-				path = cordova.file.externalRootDirectory
 			var deferred = $q.defer();
-			window.resolveLocalFileSystemURL(
-				path
-				,function(entry){
-					deferred.resolve(entry)
-				}
-				,function(error){
-					deferred.reject(error);
-				}
-			);
+			try{
+				if(typeof(path) === "undefined")
+					path = cordova.file.externalRootDirectory
+				var deferred = $q.defer();
+				window.resolveLocalFileSystemURL(
+					path
+					,function(entry){
+						deferred.resolve(entry)
+					}
+					,function(error){
+						deferred.reject(error);
+					}
+				);
+			}catch(error){
+				console.debug("GetFileEntryFromPath. Peta. Estás en local?");
+				deferred.reject(error);
+			}
+			
             return deferred.promise;
 		},
 		GetContents: function(fileEntry){

@@ -8,8 +8,8 @@ angular.module('slamp.leds', ['ionic'])
 })
 
 /**
-* SINGLE LED CONTROLLER
+*  LEDS CONTROLLER
 */
-.controller('SingleLedCtrl', function ($scope) {
+.controller('LedsCtrl', function ($scope) {
 	console.debug("controller")
 })
