@@ -1,10 +1,25 @@
-<div class="list">
-  <div class="item range range-positive">
-    <i class="icon ion-ios-sunny-outline"></i>
-    <input type="range" name="volume" min="0" max="100"
-    value="33">
-    <i class="icon ion-ios-sunny"></i>
-  </div>
-</div>
+<ion-view view-title="LED Control" ng-controller="LedsCtrl">
+  	<ion-content>
+  		<p>Selected led: {{scope.selectedLed.id}}</p>
+  		<button ng-click="testi()">Test</button>
+		<div class="list">
+			<div class="item range range-positive">
+		    	<i class="icon ion-ios-sunny-outline"></i>
+		    	<input type="range" name="red" min="0" max="100" value="33" ng-model="selectedLed.r">
+		    	<i class="icon ion-ios-sunny"></i>
+		  	</div>
+		  	<div class="item range range-positive">
+		    	<i class="icon ion-ios-sunny-outline"></i>
+		    	<input type="range" name="green" min="0" max="100" value="33" ng-model="selectedLed.g">
+		    	<i class="icon ion-ios-sunny"></i>
+		  	</div>
+		  	<div class="item range range-positive">
+		    	<i class="icon ion-ios-sunny-outline"></i>
+		    	<input type="range" name="blue" min="0" max="100" value="33" ng-model="selectedLed.b">
+		    	<i class="icon ion-ios-sunny"></i>
+		  	</div>
+		</div>
+	</ion-content>
+</ion-view>
 
-<button class="button button-assertive" ui-sref="home">To Status</button>
+

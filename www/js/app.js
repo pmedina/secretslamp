@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 'slamp.leds'])
+angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 'slamp.leds', 'slamp.datafactory'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -59,6 +59,15 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       }
     }
   })
+  .state('app.led', {
+    url: '/led',
+    views: {
+      'menuContent': {
+          templateUrl: 'templates/led.html',
+          controller: 'LedsCtrl'
+      }
+    }
+  })
   .state('app.lampcontrol_side1', {
     url: '/lampcontrol_side1',
     views: {
@@ -79,7 +88,8 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       url: '/lampcontrol',
       views: {
         'menuContent': {
-          templateUrl: 'templates/lampcontrol.html'
+          templateUrl: 'templates/lampcontrol.html',
+          controller: 'LedsCtrl'
         }
       }
     });
