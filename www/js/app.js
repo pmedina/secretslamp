@@ -68,19 +68,35 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       }
     }
   })
-  .state('app.lampcontrol_side1', {
-    url: '/lampcontrol_side1',
+  .state('app.leds_back', {
+    url: '/leds_back',
     views: {
       'menuContent': {
-          templateUrl: 'templates/lampcontrol_side1.html'
+          templateUrl: 'templates/leds_back.html'
       }
     }
   })
-  .state('app.lampcontrol_side2', {
-    url: '/lampcontrol_side2',
+  .state('app.leds_top', {
+    url: '/leds_top',
     views: {
       'menuContent': {
-          templateUrl: 'templates/lampcontrol_side2.html'
+          templateUrl: 'templates/leds_top.html'
+      }
+    }
+  })
+  .state('app.leds_left', {
+    url: '/leds_left',
+    views: {
+      'menuContent': {
+          templateUrl: 'templates/leds_left.html'
+      }
+    }
+  })
+  .state('app.leds_right', {
+    url: '/leds_right',
+    views: {
+      'menuContent': {
+          templateUrl: 'templates/leds_right.html'
       }
     }
   })

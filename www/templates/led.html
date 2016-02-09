@@ -1,24 +1,33 @@
 <ion-view view-title="LED Control" ng-controller="LedsCtrl" ng-init="getSelectedLed()">
   	<ion-content>
-  		<p>Selected led: {{selected.id}}</p>
-  		<ion-toggle ng-true-value="'ON'" ng-model="selected.status" ng-false-value="'OFF'" toggle-class="toggle-calm">Status</ion-toggle>
-  		<button ng-click="toggleLed()">Test</button>
-		<div class="list">
-			<div class="item range range-positive">
-		    	<i class="icon ion-ios-sunny-outline"></i>
-		    	<input type="range" name="red" min="0" max="255" ng-model="selected.r">
+		<div class="list card">
+			<div class="item item-avatar">
+				<!--<img src="avatar.jpg">-->
+				<h1>Selected led: {{selected.ledId}}</h1>
+			</div>
+
+			<div class="item">
+				<ion-toggle ng-true-value="'ON'" ng-model="selected.status" ng-false-value="'OFF'" toggle-class="toggle-calm" ng-change="changeStatus()">Status</ion-toggle>
+			</div>
+  			
+			<div class="item range range-assertive">
 		    	<i class="icon ion-ios-sunny"></i>
+		    	<input type="range" name="red" min="0" max="255" ng-model="selected.r" ng-change="changeStatus()">
+		    	<i class="icon ion-ios-sunny-outline"></i>
 		  	</div>
+
+		  	<div class="item range range-balanced">
+		    	<i class="icon ion-ios-sunny"></i>
+		    	<input type="range" name="green" min="0" max="255" ng-model="selected.g" ng-change="changeStatus()">
+		    	<i class="icon ion-ios-sunny-outline"></i>
+		  	</div>
+
 		  	<div class="item range range-positive">
-		    	<i class="icon ion-ios-sunny-outline"></i>
-		    	<input type="range" name="green" min="0" max="255" ng-model="selected.g">
 		    	<i class="icon ion-ios-sunny"></i>
-		  	</div>
-		  	<div class="item range range-positive">
+		    	<input type="range" name="blue" min="0" max="255" ng-model="selected.b" ng-change="changeStatus()">
 		    	<i class="icon ion-ios-sunny-outline"></i>
-		    	<input type="range" name="blue" min="0" max="255" ng-model="selected.b">
-		    	<i class="icon ion-ios-sunny"></i>
 		  	</div>
+		  	
 		</div>
 	</ion-content>
 </ion-view>

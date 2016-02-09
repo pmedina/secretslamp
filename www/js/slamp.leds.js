@@ -14,6 +14,7 @@ angular.module('slamp.leds', ['ionic'])
 .controller('LedsCtrl', function ($scope, $state, LedsFactory) {
 	
 	$scope.selected = null;
+	$scope.model = null;
 
 	$scope.openLedControls = function(ledId){
 		$scope.lampModel = LedsFactory.GetModel();
@@ -22,17 +23,29 @@ angular.module('slamp.leds', ['ionic'])
 		$state.go('app.led');
 	}
 
-	$scope.toggleLed = function(){
-		$scope.selected.status = "ON";
+	/**
+	* Triggered when current selected led changes status
+	*
+	*/
+	$scope.changeStatus = function(){
+		console.debug("status changed for led ID:"+ $scope.selected.ledId);
+		var command = $scope.SerializeCommand($scope.selected);
+		LedsFactory.BTSend(command);
 	}
 
-	$scope.btSend = function(){
-
-
+	$scope.getLedStatus = function(ledId){
+		LedsFactory.GetStatusLed(ledId);
 	}
 
 	$scope.getSelectedLed = function(){
 		$scope.selected = LedsFactory.GetSelectedLed();
 	}
+
+	$scope.SerializeCommand = function(oLed){
+		var statusStr = "*"+oLed.side+","+oLed.order+","+oLed.r+","+oLed.g+","+oLed.b+","+oLed.status;
+		return statusStr;
+	}
+
+
 
 })

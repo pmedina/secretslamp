@@ -1,74 +1,100 @@
 <ion-view view-title="Lamp Control" ng-controller="LedsCtrl">
   <ion-content>
-  	<h1>Lamp Control</h1>
+  	
   	<div class="row">
-  		<div class="col-25">
-    	
+  		<div class="col">
+  			<h1>SIDE 2: FRONT angel</h1>
   		</div>
+  	</div>
+
+  	<div class="row">
+  		<div class="col">
+  		</div>
+  		<div class="col">
+  			<a class="button button-block" href="#/app/leds_top">Go to top (SIDE 5)</a>
+  		</div>
+  		<div class="col">
+  		</div>
+  	</div>
+  	
+
+  	<div class="row">
+  		<div class="col-20"></div>
 		 
-		<div class="col-50">
+		<div class="col-60">
 			<div class="row">
 				<div class="col">
-					<button class="button button-block" ng-click="openLedControls('h1')">LED H1</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('28')">2_8</button>
 				</div>
 				<div class="col">
-					<button class="button button-block" ng-click="openLedControls('h2')">LED H2</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('27')">2_7</button>
 				</div>
 				<div class="col">
-					<button class="button button-block" ng-click="test('h3')">LED H3</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('26')">2_6</button>
 				</div>
 			</div>
 		</div>
 
-		<div class="col-25">
-			
-		</div>
+		<div class="col-20"></div>
+
 	</div>
 	<div class="row">
-  		<div class="col-25">
-    		<a class="button button-block" href="#/app/lampcontrol_side1">SIDE 1</a>
+  		<div class="col-20">
+  			<a class="button button-block" href="#/app/leds_left">Go to left (SIDE 1)</a>
   		</div>
 		 
-		<div class="col-50">
+		<div class="col-60">
 			<div class="row">
 				<div class="col">
-					<button class="button button-block" ng-click="test('h4')">LED H4</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('25')">2_5</button>
 				</div>
 				<div class="col">
-					<button class="button button-block" ng-click="test('h5')">LED H5</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('24')">2_4</button>
 				</div>
 				<div class="col">
-					<button class="button button-block" ng-click="test('h6')">LED H6</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('23')">2_3</button>
 				</div>
 			</div>
 		</div>
 
-		<div class="col-25">
-			<a class="button button-block" href="#/app/lampcontrol_side2">SIDE 2</a>
+		<div class="col-20">
+			<a class="button button-block " href="#/app/leds_right">Go to right (SIDE 3)</a>
 		</div>
 	</div>
+
 	<div class="row">
-  		<div class="col-25">
+  		<div class="col-20">
     		
   		</div>
 		 
-		<div class="col-50">
+		<div class="col-60">
 			<div class="row">
 				<div class="col">
-					<button class="button button-block" ng-click="test('h7')">LED H7</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('22')">2_2</button>
 				</div>
 				<div class="col">
-					<button class="button button-block" ng-click="test('h8')">LED H8</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('21')">2_1</button>
 				</div>
 				<div class="col">
-					<button class="button button-block" ng-click="test('h9')">LED H9</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('20')">2_0</button>
 				</div>
 			</div>
 		</div>
 
-		<div class="col-25">
+		<div class="col-20">
 			
 		</div>
 	</div>
+	
+	<div class="row">
+  		<div class="col">
+  		</div>
+  		<div class="col">
+  			<a class="button button-block" href="#/app/leds_back">Go to back (SIDE 4)</a>
+  		</div>
+  		<div class="col">
+  		</div>
+  	</div>
+
   </ion-content>
 </ion-view>
