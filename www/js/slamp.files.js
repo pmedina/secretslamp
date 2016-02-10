@@ -9,7 +9,6 @@ angular.module('slamp.files', ['ionic'])
 .run(function($ionicPlatform, $http) {
 
 	console.debug("run auth");
-	// TODO: Temporary disabled to avoid pain at development. Save auth in localstorage. Check if not exists
 	return;
 	// Open in external browser
  	var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
@@ -32,29 +31,23 @@ angular.module('slamp.files', ['ionic'])
 	});
 })
 
-
-/**
-* LOGIN
-*/
 .controller('FilesCtrl', function(filesService, cameraService, $scope, $ionicPlatform, $state, $ionicLoading) {
 	
 
-	$scope.photodata = null;
-	$scope.files = [];
-    $currentDir = null;
-    $hasParent = false;
-    $scope.photodata = null;
+	//$scope.files = [];
+    //$currentDir = null;
+    //$hasParent = false;
 
 
     $ionicPlatform.ready(function() {
-   		filesService.GetFileEntryFromPath().then(
+   		/*filesService.GetFileEntryFromPath().then(
    			function(entry){
    				$scope.files = entry;
    			}
    			,function(failure){
    				console.debug(failure);
    			}
-   		)
+   		)*/
     })
 
 	$scope.fromCamera = function()
@@ -62,12 +55,11 @@ angular.module('slamp.files', ['ionic'])
 		cameraService.GetPicture(0).then(
 			function(result){
 				console.debug(result);
-				$scope.imgURI = result;
+				cameraService.currentPhotoUri = result;
 				window.plugins.Base64.encodeFile(
 					result, 
 					function(base64){
-            			$scope.photodata = base64;
-            			console.debug($scope.photodata);
+            			cameraService.currentPhotoData = base64;
             			$state.go('app.photobrowser');
         			}
         		);
@@ -77,6 +69,20 @@ angular.module('slamp.files', ['ionic'])
 			}
 		);
 	};
+
+	$scope.getCurrentPhotoData = function(){
+		return cameraService.currentPhotoData;
+	}
+
+	$scope.getCurrentPhotoUri = function(){
+		return cameraService.currentPhotoUri;
+	}
+
+	$scope.uploadPhoto = function(){
+		console.debug($scope.getCurrentPhotoData());
+		alert("TODO! base64 content exists in $scope.getCurrentPhotoData()");
+	}
+
 	 
 	$scope.fromFilesystem = function()
 	{
@@ -151,9 +157,14 @@ angular.module('slamp.files', ['ionic'])
 
 .factory('cameraService', function($q){
 	return{
-		GetPicture: function(src){
+
+		currentPhotoData: null
+		,currentPhotoUri: ""
+
+		,GetPicture: function(src){
 			var source = src == 0 ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY;
 			var deferred = $q.defer();
+			var that = this;
 			navigator.camera.getPicture(
 				function(result) {
         			// Do any magic you need
@@ -174,6 +185,7 @@ angular.module('slamp.files', ['ionic'])
       		);
       		return deferred.promise;
 		}
+
 		,SavePicture: function(path){
 			var newFileUri  = cordova.file.dataDirectory + "images/";
 			var fileExt     = "." + oldFileUri.split('.').pop();

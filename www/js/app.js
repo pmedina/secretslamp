@@ -32,16 +32,15 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
     templateUrl: 'templates/menu.html'
   })
 
-  .state('app.secrets', {
-    url: '/secrets',
+  .state('app.upload_secret', {
+    url: '/upload_secret',
     views: {
       'menuContent': {
-        templateUrl: 'templates/secrets.html',
-        controller: 'FilesCtrl'
+        templateUrl: 'templates/upload_secret.html'
       }
     }
   })
-  .state('app.filebrowser', {
+  /*.state('app.filebrowser', {
     url: '/filebrowser',
     views: {
       'menuContent': {
@@ -50,6 +49,7 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       }
     }
   })
+  */
   .state('app.photobrowser', {
     url: '/photobrowser',
     views: {
@@ -100,6 +100,14 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       }
     }
   })
+  .state('app.bluetooth', {
+    url: '/bluetooth',
+    views: {
+      'menuContent': {
+          templateUrl: 'templates/bluetooth.html'
+      }
+    }
+  })
   .state('app.lampcontrol', {
       url: '/lampcontrol',
       views: {
@@ -110,5 +118,5 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/secrets');
+  $urlRouterProvider.otherwise('/app/upload_secret');
 });

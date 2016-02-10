@@ -64,6 +64,7 @@ angular.module('slamp.datafactory', ['ionic'])
 		,selectedLed: null
 
 		,GetModel: function(){
+			this.BTFind();
 			return this.lampModel;
 		}
 		
@@ -76,14 +77,6 @@ angular.module('slamp.datafactory', ['ionic'])
 		*
 		*/
 		,SelectLed: function(ledId){
-			/*for(var i=0; i<this.lampModel.length; i++){
-				var led = this.lampModel[i];
-				if(led.ledId == ledId){
-					this.selectedLed = led;
-					break; 
-				}
-
-			}*/
 			this.selectedLed = this._findLed(ledId);
 		}
 
@@ -107,6 +100,18 @@ angular.module('slamp.datafactory', ['ionic'])
 		,BTSend: function(command){
 			console.debug(command);
 			// TODO: if paired, send the command! 
+		}
+
+		,BTFind: function(){
+			bluetoothSerial.list(
+				function(devices){
+					console.debug(devices);
+				},
+				function(){
+					alert("peto")
+				}
+			);
+
 		}
 
 	}

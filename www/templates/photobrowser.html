@@ -5,13 +5,12 @@
 		</div>
 
 		<div class="item item-image">
-			<img ng-src="{{photodata}}" style="width:100%; height: auto;min-height: 400px;">
+			<img ng-src="{{getCurrentPhotoUri()}}" style="width:100%; height: auto;min-height: 400px;">
 		</div>
-		<textarea>{{photodata}}</textarea>
 
-		<a class="item item-icon-left assertive">
-		<i class="icon ion-ios-camera"></i>
-			Take photo
+		<a class="item item-icon-left dark" ng-click="uploadPhoto()">
+		<i class="icon ion-cloud"></i>
+			Upload
 		</a>
 	</div>
 </ion-scroll>
