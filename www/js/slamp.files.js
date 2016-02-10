@@ -6,22 +6,24 @@ var clientSecret = "9m92Fhei0wB2XLaEha7pUFIT";
 
 angular.module('slamp.files', ['ionic'])
 
-.run(function($ionicPlatform, $http) {
+.run(function($ionicPlatform, $http, filesService) {
 
 	console.debug("run auth");
-	return;
 	// Open in external browser
  	var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
 	ref.addEventListener('loadstart', function(event) { 
 	    if((event.url).startsWith("http://localhost/callback")) {
 	        requestToken = (event.url).split("code=")[1];
+	        console.debug("sending request");
 	        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 			$http({method: "post", url: "https://accounts.google.com/o/oauth2/token", data: "client_id=" + clientId + "&client_secret=" + clientSecret + "&redirect_uri=http://localhost/callback" + "&grant_type=authorization_code" + "&code=" + requestToken })
 			.then(
-				function(data){
-					accessToken = data.access_token;
+				function(response){
+					console.debug("Oauth:"+response);
+					filesService.SetToken(response.data.access_token);
 				}
 				,function(data, status){
+					console.debug(data);
 					alert("ERROR: " + data);
 				}
 
@@ -79,8 +81,12 @@ angular.module('slamp.files', ['ionic'])
 	}
 
 	$scope.uploadPhoto = function(){
-		console.debug($scope.getCurrentPhotoData());
-		alert("TODO! base64 content exists in $scope.getCurrentPhotoData()");
+		filesService.UploadPhoto(
+			"secret_"+ Date.now().toString()+".jpg"
+			,"description"
+			,$scope.getCurrentPhotoData()
+			,filesService.GetToken()
+		);
 	}
 
 	 
@@ -142,9 +148,6 @@ angular.module('slamp.files', ['ionic'])
     	}
     }
 
-
-
-
 	$scope.viewSecrets = function()
 	{
 		// Open in app browser
@@ -156,6 +159,7 @@ angular.module('slamp.files', ['ionic'])
 
 
 .factory('cameraService', function($q){
+	
 	return{
 
 		currentPhotoData: null
@@ -193,9 +197,69 @@ angular.module('slamp.files', ['ionic'])
 	}
 })
 
-.factory('filesService', function($http, $q){
+.factory('filesService', function($http, $q, $ionicLoading){
 	return{
-		GetFileEntryFromPath: function(path){
+
+		gToken: null
+
+		,GetToken: function(){
+			return this.gToken;
+		}
+		,SetToken: function(token){
+			this.gToken = token;
+		}
+
+		,UploadPhoto: function(name, description, base64content, gToken){
+
+			console.debug("uploading using token"+ gToken);
+			$ionicLoading.show({
+      			template: '<ion-spinner icon="spiral"></ion-spinner>La paciencia es la mayor de las virtudes'
+    		});
+
+		    const boundary = '-------314159265358979323846';
+  			const delimiter = "\r\n--" + boundary + "\r\n";
+  			const close_delim = "\r\n--" + boundary + "--";
+			var contentType = 'application/octet-stream';
+		    var metadata = {
+		      'title': name,
+		      'mimeType': contentType
+		    };
+
+		    var multipartRequestBody =
+		        delimiter +
+		        'Content-Type: application/json\r\n\r\n' +
+		        JSON.stringify(metadata) +
+		        delimiter +
+		        'Content-Type: ' + contentType + '\r\n' +
+		        'Content-Transfer-Encoding: base64\r\n' +
+		        '\r\n' +
+		        base64content +
+		        close_delim;
+
+		    $http.defaults.headers.post["Content-Type"] = 'multipart/mixed; boundary="' + boundary + '"';
+
+		    $http({
+		    	method: "post", 
+		    	url: "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&access_token="+gToken,
+		    	body: multipartRequestBody
+		    })
+			.then(
+				function(response){
+					console.debug(response);
+					$ionicLoading.hide();
+				}
+				,function(data, status){
+					console.debug(status);
+					console.debug(data);
+					alert("ERROR: " + data);
+					$ionicLoading.hide();
+				}
+
+			)
+
+		}
+
+		,GetFileEntryFromPath: function(path){
 			var deferred = $q.defer();
 			try{
 				if(typeof(path) === "undefined")
