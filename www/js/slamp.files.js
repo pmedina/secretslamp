@@ -19,7 +19,7 @@ angular.module('slamp.files', ['ionic'])
 			$http({method: "post", url: "https://accounts.google.com/o/oauth2/token", data: "client_id=" + clientId + "&client_secret=" + clientSecret + "&redirect_uri=http://localhost/callback" + "&grant_type=authorization_code" + "&code=" + requestToken })
 			.then(
 				function(response){
-					console.debug("Oauth:"+response);
+					console.debug(response);
 					filesService.SetToken(response.data.access_token);
 				}
 				,function(data, status){
@@ -40,20 +40,12 @@ angular.module('slamp.files', ['ionic'])
     //$currentDir = null;
     //$hasParent = false;
 
-
     $ionicPlatform.ready(function() {
-   		/*filesService.GetFileEntryFromPath().then(
-   			function(entry){
-   				$scope.files = entry;
-   			}
-   			,function(failure){
-   				console.debug(failure);
-   			}
-   		)*/
     })
 
 	$scope.fromCamera = function()
 	{
+
 		cameraService.GetPicture(0).then(
 			function(result){
 				console.debug(result);
@@ -81,12 +73,46 @@ angular.module('slamp.files', ['ionic'])
 	}
 
 	$scope.uploadPhoto = function(){
-		filesService.UploadPhoto(
+
+		$ionicLoading.show({
+      		template: '<p><ion-spinner class="spinner-energized"></i>Creating File...</p>'
+    	});
+
+		filesService.CreateFile(
 			"secret_"+ Date.now().toString()+".jpg"
 			,"description"
-			,$scope.getCurrentPhotoData()
 			,filesService.GetToken()
+		).then(
+			function(resultData){
+				$ionicLoading.hide();
+				console.debug(resultData);
+				$ionicLoading.show({
+      				template: '<p><ion-spinner class="spinner-energized"></i>Uploading File Contents...</p>'
+    			});
+				filesService.UploadPhoto(
+					resultData.id, 
+					cameraService.currentPhotoData,
+					filesService.GetToken()
+				).then(
+					function(response){
+						console.debug(response);
+						$ionicLoading.hide();
+						$state.go('app.upload_secret');
+						alert("Secret is safe! TODO: Send random led...");
+					}
+					,function(response){
+						console.debug(response);
+						$ionicLoading.hide();
+					}
+				)
+
+			}
+			,function(failureData){
+				alert(failureData.statusText);
+				$ionicLoading.hide();
+			}
 		);
+
 	}
 
 	 
@@ -209,17 +235,50 @@ angular.module('slamp.files', ['ionic'])
 			this.gToken = token;
 		}
 
-		,UploadPhoto: function(name, description, base64content, gToken){
 
-			console.debug("uploading using token"+ gToken);
-			$ionicLoading.show({
-      			template: '<ion-spinner icon="spiral"></ion-spinner>La paciencia es la mayor de las virtudes'
-    		});
+		,CreateFile: function(name, description, gToken){
+		    
+		    var deferred = $q.defer();
+    		
+    		var that = this;
+		    var req = {
+				 method: 'POST',
+				 url: 'https://www.googleapis.com/drive/v2/files?access_token='+that.GetToken(), // Apparently the authorisation header is not taken? I just pass it along too.
+				 headers: {
+				   'Content-Type': 'application/json',
+				   'Authorization': 'Bearer '+that.GetToken()
+				 },
+				 data: {
+		    		title: name,
+		    		"mimeType": 'image/jpeg',
+		    		description: description
+		    	}
+			}
 
-		    const boundary = '-------314159265358979323846';
+		    $http(req).then(
+				function(response){
+					deferred.resolve(response.data);
+				}
+				,function(data, status){
+					deferred.reject(data); 
+				}
+
+			)
+
+			return deferred.promise
+
+		}
+
+		,UploadPhoto: function(fileId, base64content, gtoken){
+			
+			var deferred = $q.defer();
+			console.debug("about to add content for file:"+fileId);
+			console.debug("content to push:"+base64content);
+
+			const boundary = '-------314159265358979323846';
   			const delimiter = "\r\n--" + boundary + "\r\n";
   			const close_delim = "\r\n--" + boundary + "--";
-			var contentType = 'application/octet-stream';
+			var contentType = 'application/octect-stream';
 		    var metadata = {
 		      'title': name,
 		      'mimeType': contentType
@@ -228,7 +287,7 @@ angular.module('slamp.files', ['ionic'])
 		    var multipartRequestBody =
 		        delimiter +
 		        'Content-Type: application/json\r\n\r\n' +
-		        JSON.stringify(metadata) +
+		        //JSON.stringify(metadata) +
 		        delimiter +
 		        'Content-Type: ' + contentType + '\r\n' +
 		        'Content-Transfer-Encoding: base64\r\n' +
@@ -236,26 +295,29 @@ angular.module('slamp.files', ['ionic'])
 		        base64content +
 		        close_delim;
 
-		    $http.defaults.headers.post["Content-Type"] = 'multipart/mixed; boundary="' + boundary + '"';
+			var req = {
+				 method: 'PUT',
+				 url: 'https://www.googleapis.com/upload/drive/v2/files/'+fileId+'?access_token='+ gtoken+"&uploadType=multipart", // Apparently the authorisation header is not taken? I just pass it along too.
+				 headers: {
+				  'Content-Type': 'multipart/mixed; boundary="' + boundary + '"',
+				   'Authorization': 'Bearer '+ gtoken
+				 },
+				 body: multipartRequestBody
+			}
 
-		    $http({
-		    	method: "post", 
-		    	url: "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&access_token="+gToken,
-		    	body: multipartRequestBody
-		    })
-			.then(
+			$http(req).then(
 				function(response){
 					console.debug(response);
-					$ionicLoading.hide();
+					deferred.resolve(response);
 				}
 				,function(data, status){
-					console.debug(status);
 					console.debug(data);
-					alert("ERROR: " + data);
-					$ionicLoading.hide();
+					deferred.reject(data)
 				}
 
 			)
+
+			return deferred.promise;
 
 		}
 
@@ -281,6 +343,7 @@ angular.module('slamp.files', ['ionic'])
 			
             return deferred.promise;
 		},
+
 		GetContents: function(fileEntry){
 			var deferred = $q.defer();
 			directoryReader = (typeof(fileEntry.root) != "undefined") ? fileEntry.root.createReader() : fileEntry.createReader();

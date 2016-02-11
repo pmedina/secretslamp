@@ -1,16 +1,20 @@
 <ion-scroll class="has-header" ng-controller="FilesCtrl">
 	<div class="list card" style="margin-top: 50px;">
 		<div class="item item-avatar">
-			<h2>Your Image Secret</h2>
+			<p>Your Image Secret</p>
 		</div>
 
 		<div class="item item-image">
 			<img ng-src="{{getCurrentPhotoUri()}}" style="width:100%; height: auto;min-height: 400px;">
 		</div>
 
-		<a class="item item-icon-left dark" ng-click="uploadPhoto()">
-		<i class="icon ion-cloud"></i>
-			Upload
+		<ion-icon name="google"></ion-icon>
+		<a class="item item-icon-left dark" ng-click="uploadPhoto('gdrive')">
+			Save Secret
 		</a>
+		<!--<a class="item item-icon-left dark" ng-click="uploadPhoto('dropbox')">
+		<i class="icon ion-dropbox"></i>
+			Dropbox Secret
+		</a>-->
 	</div>
 </ion-scroll>
