@@ -7,41 +7,98 @@ angular.module('slamp.ble', ['ionic'])
 /**
 * BT Controller
 */
-.controller('BluetoothCtrl', function($scope, $ionicPlatform, $state, $ionicLoading) {
+.controller('BluetoothCtrl', function(LedsFactory, bluetoothService, $scope, $ionicPlatform, $state, $ionicLoading) {
 
 
 	$scope.devices = [
 		{address: "84:10:0D:94:15:0A", class: "1796", id: "84:10:0D:94:15:0A", name: "Test device de broma"},
 	];
 
-	$scope.listDevices = function(){
+	$scope.initBluetoothCard = function(){
 		if(typeof(bluetoothSerial) === "undefined")
 			return;
-		bluetoothSerial.list(
-			function(devices){
-				console.debug(devices);
-				$scope.devices = devices;
-			},
-			function(){
-				alert("peto");
+		bluetoothService.GetDevices().then(
+			function(list){
+				$scope.devices = list;
+			}
+			,function(){
+				alert("Can not get devices!");
 			}
 		);
-
 	}
 
 	$scope.onDeviceClick = function(device){
 
-		bluetoothSerial.connect(
-			device.address, 
+		bluetoothService.Connect(device).then(
 			function(){
-				alert("connected!")
 				console.debug("connected");
-			},
-			function(failure){
-				alert("cant connect!"+failure);
-				console.debug("no conecto:"+failure);
+				alert("Connected!");
 			}
-		);     
+			,function(error){
+				alert(error);
+			}
+		);  
+	}
+
+	$scope.isDeviceConnected = function(device){
+		console.debug(bluetoothService.IsDeviceConnected(device.address));
+		return bluetoothService.IsDeviceConnected(device.address);
+	}
+
+})
+
+
+.factory('bluetoothService', function($q){
+	
+	return{
+		
+		isConnected: false
+		,connectedDevice: null
+		,devicesList: null
+
+		,Connect: function(device){
+			var deferred = $q.defer();
+			var that = this;
+			bluetoothSerial.connect(
+				device.address, 
+				function(){
+					that.connectedDevice = device;
+					deferred.resolve();
+				},
+				function(failure){
+					deferred.reject(failure);
+					that.connectedDevice = null;
+				}
+			);   
+			return deferred.promise;
+		}
+
+		,GetDevices: function(){
+			var deferred = $q.defer();
+			var that = this;
+			bluetoothSerial.list(
+				function(devicesList){
+					console.debug(devicesList);
+					that.devicesList = devicesList;
+					deferred.resolve(that.devicesList);
+				},
+				function(error){
+					deferred.reject(error);
+				}
+			);
+			return deferred.promise;
+		}
+
+		,IsDeviceConnected: function(deviceId){
+			return this.connectedDevice != null && this.connectedDevice.address == deviceId;
+
+		}
+
+		,SendCommand: function(command){
+			console.debug("BluetoothFactory.SendCommand() received:"+command);
+			alert("BluetoothFactory.SendCommand():"+command);
+		}
+
 	}
 
 })

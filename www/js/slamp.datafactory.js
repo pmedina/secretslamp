@@ -1,7 +1,7 @@
 angular.module('slamp.datafactory', ['ionic'])
 
 // pass data between views
-.factory('LedsFactory', function($q){
+.factory('LedsFactory', function(bluetoothService, $q){
 	return{
 		lampModel: [
 			// SIDE 1: LEFT
@@ -58,24 +58,39 @@ angular.module('slamp.datafactory', ['ionic'])
 			{side: "5", ledId: "56",order: "6", r: "120", g: "120", b: "120", status: "OFF"},
 			{side: "5", ledId: "57",order: "7", r: "120", g: "120", b: "120", status: "OFF"},
 			{side: "5", ledId: "58",order: "8", r: "120", g: "120", b: "120", status: "OFF"}
-
 		]
 
 		,selectedLed: null
 
+
+		/*
+		* #0   stand by , aunque esto sólo se activará por el estado del pairing, esta para debuggear, hace el fade up que viste en el último video
+		* #1   modo secreto 
+		* #2   modo led random 
+		* #3   modo sweep
+		* 
+		*/
+		,currentMode: "#0"
+
+
+		,GetMode: function(){
+			return this.currentMode;
+		}
+		,SetMode: function(mode){
+			this.currentMode = mode;
+			var modeStr = mode; // maybe we need to play with the text to send. The mode stays
+			bluetoothService.SendCommand(modeStr); 
+		}
+
 		,GetModel: function(){
-			this.BTFind();
 			return this.lampModel;
 		}
+
 		
 		,GetSelectedLed: function(){
 			return this.selectedLed;
 		}
 
-		/**
-		* Gets the selected led by ID
-		*
-		*/
 		,SelectLed: function(ledId){
 			this.selectedLed = this._findLed(ledId);
 		}
@@ -97,22 +112,6 @@ angular.module('slamp.datafactory', ['ionic'])
 			return null;
 		}
 
-		,BTSend: function(command){
-			console.debug(command);
-			// TODO: if paired, send the command! 
-		}
-
-		,BTFind: function(){
-			bluetoothSerial.list(
-				function(devices){
-					console.debug(devices);
-				},
-				function(){
-					alert("peto")
-				}
-			);
-
-		}
 
 	}
 

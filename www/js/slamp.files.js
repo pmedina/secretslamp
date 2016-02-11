@@ -9,6 +9,7 @@ angular.module('slamp.files', ['ionic'])
 .run(function($ionicPlatform, $http, filesService) {
 
 	console.debug("run auth");
+	return;
 	// Open in external browser
  	var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
 	ref.addEventListener('loadstart', function(event) { 
@@ -33,15 +34,31 @@ angular.module('slamp.files', ['ionic'])
 	});
 })
 
-.controller('FilesCtrl', function(filesService, cameraService, $scope, $ionicPlatform, $state, $ionicLoading) {
+.controller('FilesCtrl', function(bluetoothService, LedsFactory, filesService, cameraService, $scope, $ionicPlatform, $state, $ionicLoading) {
 	
 
 	//$scope.files = [];
     //$currentDir = null;
     //$hasParent = false;
+    $scope.lampStatus = {
+    	mode: "",
+    	leds: []
+    }
 
     $ionicPlatform.ready(function() {
+    
     })
+
+    $scope.$watch(
+    	'lampStatus.mode', 
+    	function(){
+    		LedsFactory.SetMode($scope.lampStatus.mode);
+    	}
+    );
+
+    $scope.initSecretsCard = function(){
+		 $scope.lampStatus.mode = LedsFactory.GetMode();
+    }
 
 	$scope.fromCamera = function()
 	{
@@ -75,7 +92,7 @@ angular.module('slamp.files', ['ionic'])
 	$scope.uploadPhoto = function(){
 
 		$ionicLoading.show({
-      		template: '<p><ion-spinner class="spinner-energized"></i>Creating File...</p>'
+      		template: '<p><ion-spinner class="spinner-energized"></i></p>'
     	});
 
 		filesService.CreateFile(
@@ -87,7 +104,7 @@ angular.module('slamp.files', ['ionic'])
 				$ionicLoading.hide();
 				console.debug(resultData);
 				$ionicLoading.show({
-      				template: '<p><ion-spinner class="spinner-energized"></i>Uploading File Contents...</p>'
+      				template: '<p><ion-spinner class="spinner-energized"></i></p>'
     			});
 				filesService.UploadPhoto(
 					resultData.id, 
@@ -99,6 +116,7 @@ angular.module('slamp.files', ['ionic'])
 						$ionicLoading.hide();
 						$state.go('app.upload_secret');
 						alert("Secret is safe! TODO: Send random led...");
+						LedsFactory.SwitchRandom();
 					}
 					,function(response){
 						console.debug(response);
@@ -184,6 +202,7 @@ angular.module('slamp.files', ['ionic'])
 })
 
 
+
 .factory('cameraService', function($q){
 	
 	return{
@@ -235,7 +254,10 @@ angular.module('slamp.files', ['ionic'])
 			this.gToken = token;
 		}
 
-
+		/**
+		* Returns a promise that creates a file in google drive
+		*
+		*/
 		,CreateFile: function(name, description, gToken){
 		    
 		    var deferred = $q.defer();
@@ -269,6 +291,10 @@ angular.module('slamp.files', ['ionic'])
 
 		}
 
+		/**
+		* Returns a promise that puts contents into a given file id
+		*
+		*/
 		,UploadPhoto: function(fileId, base64content, gtoken){
 			
 			var deferred = $q.defer();
@@ -321,6 +347,7 @@ angular.module('slamp.files', ['ionic'])
 
 		}
 
+
 		,GetFileEntryFromPath: function(path){
 			var deferred = $q.defer();
 			try{
@@ -344,6 +371,8 @@ angular.module('slamp.files', ['ionic'])
             return deferred.promise;
 		},
 
+
+
 		GetContents: function(fileEntry){
 			var deferred = $q.defer();
 			directoryReader = (typeof(fileEntry.root) != "undefined") ? fileEntry.root.createReader() : fileEntry.createReader();
@@ -357,6 +386,7 @@ angular.module('slamp.files', ['ionic'])
 			)
 			return deferred.promise;
 		}
+
 
 		,MoveFile: function(fileEntry, moveToPath){
 			console.log("move from");

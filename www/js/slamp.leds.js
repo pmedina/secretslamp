@@ -11,7 +11,7 @@ angular.module('slamp.leds', ['ionic'])
 /**
 *  LEDS CONTROLLER
 */
-.controller('LedsCtrl', function ($scope, $state, LedsFactory) {
+.controller('LedsCtrl', function ($scope, $state, LedsFactory, bluetoothService) {
 	
 	$scope.selected = null;
 	$scope.model = null;
@@ -30,7 +30,8 @@ angular.module('slamp.leds', ['ionic'])
 	$scope.changeStatus = function(){
 		console.debug("status changed for led ID:"+ $scope.selected.ledId);
 		var command = $scope.SerializeCommand($scope.selected);
-		LedsFactory.BTSend(command);
+		bluetoothService.SendCommand(command);
+		
 	}
 
 	$scope.getLedStatus = function(ledId){
