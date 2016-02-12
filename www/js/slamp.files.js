@@ -8,8 +8,8 @@ angular.module('slamp.files', ['ionic'])
 
 .run(function($ionicPlatform, $http, filesService) {
 
-	console.debug("run auth");
-	return;
+	// MOVED TO app start
+	/*console.debug("run auth");
 	// Open in external browser
  	var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
 	ref.addEventListener('loadstart', function(event) { 
@@ -32,6 +32,7 @@ angular.module('slamp.files', ['ionic'])
             ref.close();
 	    }
 	});
+	*/
 })
 
 .controller('FilesCtrl', function(bluetoothService, LedsFactory, filesService, cameraService, $scope, $ionicPlatform, $state, $ionicLoading) {
@@ -114,9 +115,9 @@ angular.module('slamp.files', ['ionic'])
 					function(response){
 						console.debug(response);
 						$ionicLoading.hide();
+						LedsFactory.SwitchRandomSecret();
 						$state.go('app.upload_secret');
-						alert("Secret is safe! TODO: Send random led...");
-						LedsFactory.SwitchRandom();
+						alert("Secret stored");
 					}
 					,function(response){
 						console.debug(response);
@@ -198,6 +199,10 @@ angular.module('slamp.files', ['ionic'])
 		window.open('http://google.com','_blank'); 
 
 	};
+
+	$scope.isConnected = function(){
+		return bluetoothService.IsConnected();
+	}
 	
 })
 

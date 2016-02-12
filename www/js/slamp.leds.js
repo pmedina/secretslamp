@@ -4,8 +4,6 @@
 angular.module('slamp.leds', ['ionic'])
 
 .run(function($ionicPlatform) {
-	console.debug("RUN");
-	// TODO: la miga de parear. 
 })
 
 /**
@@ -14,7 +12,6 @@ angular.module('slamp.leds', ['ionic'])
 .controller('LedsCtrl', function ($scope, $state, LedsFactory, bluetoothService) {
 	
 	$scope.selected = null;
-	$scope.model = null;
 
 	$scope.openLedControls = function(ledId){
 		$scope.lampModel = LedsFactory.GetModel();
@@ -27,11 +24,20 @@ angular.module('slamp.leds', ['ionic'])
 	* Triggered when current selected led changes status
 	*
 	*/
-	$scope.changeStatus = function(){
+	$scope.changeStatus = function(oldvalue, newvalue){
 		console.debug("status changed for led ID:"+ $scope.selected.ledId);
+		if($scope.selected.status == "OFF"){
+			$scope.selected.r = 0;
+			$scope.selected.g = 0;
+			$scope.selected.b = 0;
+		}
+		if($scope.selected.status == "ON" && $scope.selected.r == "0" && $scope.selected.g == "0" && $scope.selected.b == "0"){
+			$scope.selected.r = Math.floor(Math.random()*255).toString();
+			$scope.selected.g = Math.floor(Math.random()*255).toString();
+			$scope.selected.b = Math.floor(Math.random()*255).toString();
+		}
 		var command = $scope.SerializeCommand($scope.selected);
 		bluetoothService.SendCommand(command);
-		
 	}
 
 	$scope.getLedStatus = function(ledId){
@@ -43,10 +49,13 @@ angular.module('slamp.leds', ['ionic'])
 	}
 
 	$scope.SerializeCommand = function(oLed){
-		var statusStr = "*"+oLed.side+","+oLed.order+","+oLed.r+","+oLed.g+","+oLed.b+","+oLed.status;
-		return statusStr;
+		return LedsFactory.SerializeLed(oLed);
 	}
 
-
-
+	$scope.isConnected = function(){
+		return bluetoothService.IsConnected();
+	}
+	$scope.isStandbyMode = function(){
+		return LedsFactory.IsStandbyMode();
+	}
 })

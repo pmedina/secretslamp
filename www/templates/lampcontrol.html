@@ -3,85 +3,84 @@
   	
   	<div class="row">
   		<div class="col">
-  			<h1>SIDE 2: FRONT angel</h1>
+  			<h1 style="text-align: center">Front side</h1>
   		</div>
   	</div>
 
   	<div class="row">
   		<div class="col">
   		</div>
-  		<div class="col">
-  			<a class="button button-block" href="#/app/leds_top">Go to top (SIDE 5)</a>
+  		<div class="col-10">
+  			<a class="button button-block" href="#/app/leds_top"><i class="icon ion-chevron-up big big"></i></a>
   		</div>
   		<div class="col">
   		</div>
   	</div>
-  	
+  
 
   	<div class="row">
-  		<div class="col-20"></div>
+  		<div class="col-10"></div>
 		 
-		<div class="col-60">
+		<div class="col-80">
 			<div class="row">
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('28')">2_8</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('08')" ng-disabled="isConnected() == false"></button>
 				</div>
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('27')">2_7</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('07')" ng-disabled="isConnected() == false"></button>
 				</div>
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('26')">2_6</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('06')" ng-disabled="isConnected() == false"></button>
 				</div>
 			</div>
 		</div>
-
-		<div class="col-20"></div>
+		<div class="col-10"></div>
 
 	</div>
 	<div class="row">
-  		<div class="col-20">
-  			<a class="button button-block" href="#/app/leds_left">Go to left (SIDE 1)</a>
+  		<div class="col-10">
+  			<a class="button button-block" href="#/app/leds_left"><i class="icon ion-chevron-left big big"></i></ion-icon></a>
   		</div>
 		 
-		<div class="col-60">
+		<div class="col-80">
 			<div class="row">
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('25')">2_5</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('05')" ng-disabled="isConnected() == false"></button>
 				</div>
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('24')">2_4</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('04')" ng-disabled="isConnected() == false"></button>
 				</div>
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('23')">2_3</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('03')" ng-disabled="isConnected() == false"></button>
 				</div>
 			</div>
 		</div>
 
-		<div class="col-20">
-			<a class="button button-block " href="#/app/leds_right">Go to right (SIDE 3)</a>
+		<div class="col-10">
+			<a class="button button-block " href="#/app/leds_right"><i class="icon ion-chevron-right big"></i></a>
 		</div>
 	</div>
 
 	<div class="row">
-  		<div class="col-20">
+  		<div class="col-10">
     		
   		</div>
 		 
-		<div class="col-60">
+		<div class="col-80">
 			<div class="row">
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('22')">2_2</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('02')" ng-disabled="isConnected() == false"></button>
 				</div>
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('21')">2_1</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('01')" ng-disabled="isConnected() == false"></button>
 				</div>
 				<div class="col">
-					<button class="button button-block button-dark" ng-click="openLedControls('20')">2_0</button>
+					<button class="button button-block button-dark" ng-click="openLedControls('00')" ng-disabled="isConnected() == false"></button>
 				</div>
 			</div>
 		</div>
 
-		<div class="col-20">
+		<div class="col-10">
 			
 		</div>
 	</div>
@@ -89,8 +88,8 @@
 	<div class="row">
   		<div class="col">
   		</div>
-  		<div class="col">
-  			<a class="button button-block" href="#/app/leds_back">Go to back (SIDE 4)</a>
+  		<div class="col-10">
+  			<a class="button button-block" href="#/app/leds_back"><i class="icon ion-chevron-down big big"></i></a>
   		</div>
   		<div class="col">
   		</div>

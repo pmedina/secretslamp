@@ -2,6 +2,10 @@
   	<ion-content>
   		<div class="list card">
   			<div class="item">
+				<h2 ng-show="getConnectedDevice() == null"><i class="icon ion-android-cancel big"></i> Select your lamp from the devices below</h2>
+     			<h2 ng-show="getConnectedDevice() != null"><i class="icon ion-android-bulb big"></i> Currently connected to {{getConnectedDevice().name}}</h2>
+  			</div>
+  			<div class="item">
 				<ion-item ng-repeat="device in devices" ng-click="onDeviceClick(device)">
 		    		<!--<i ng-show="file.isDirectory" class="icon ion-folder"></i>-->
 		     		<i class="icon ion-bluetooth"></i>

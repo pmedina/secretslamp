@@ -7,24 +7,24 @@
 			</div>
 
 			<div class="item">
-				<ion-toggle ng-true-value="'ON'" ng-model="selected.status" ng-false-value="'OFF'" toggle-class="toggle-calm" ng-change="changeStatus()">Status</ion-toggle>
+				<ion-toggle ng-true-value="'ON'" ng-model="selected.status" ng-false-value="'OFF'" toggle-class="toggle-calm" ng-change="changeStatus()" ng-disabled="isConnected() == false">Status</ion-toggle>
 			</div>
   			
 			<div class="item range range-assertive">
 		    	<i class="icon ion-ios-sunny"></i>
-		    	<input type="range" name="red" min="0" max="255" ng-model="selected.r" ng-change="changeStatus()">
+		    	<input type="range" name="red" min="0" max="255" ng-model="selected.r" ng-change="changeStatus()" ng-disabled="isConnected() == false">
 		    	<i class="icon ion-ios-sunny-outline"></i>
 		  	</div>
 
 		  	<div class="item range range-balanced">
 		    	<i class="icon ion-ios-sunny"></i>
-		    	<input type="range" name="green" min="0" max="255" ng-model="selected.g" ng-change="changeStatus()">
+		    	<input type="range" name="green" min="0" max="255" ng-model="selected.g" ng-change="changeStatus()" ng-disabled="isConnected() == false">
 		    	<i class="icon ion-ios-sunny-outline"></i>
 		  	</div>
 
 		  	<div class="item range range-positive">
 		    	<i class="icon ion-ios-sunny"></i>
-		    	<input type="range" name="blue" min="0" max="255" ng-model="selected.b" ng-change="changeStatus()">
+		    	<input type="range" name="blue" min="0" max="255" ng-model="selected.b" ng-change="changeStatus()" ng-disabled="isConnected() == false">
 		    	<i class="icon ion-ios-sunny-outline"></i>
 		  	</div>
 		  	

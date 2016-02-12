@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 'slamp.leds', 'slamp.datafactory'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $http, filesService) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,6 +19,28 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    console.debug("run auth");
+    var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
+    ref.addEventListener('loadstart', function(event) { 
+      if((event.url).startsWith("http://localhost/callback")) {
+          requestToken = (event.url).split("code=")[1];
+          console.debug("sending request");
+          $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+      $http({method: "post", url: "https://accounts.google.com/o/oauth2/token", data: "client_id=" + clientId + "&client_secret=" + clientSecret + "&redirect_uri=http://localhost/callback" + "&grant_type=authorization_code" + "&code=" + requestToken })
+      .then(
+        function(response){
+          console.debug(response);
+          filesService.SetToken(response.data.access_token);
+        }
+        ,function(data, status){
+          console.debug(data);
+          alert("ERROR: " + data);
+        }
+
+      )
+            ref.close();
+      }
+    });
   });
 })
 
@@ -118,5 +140,5 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/upload_secret');
+  $urlRouterProvider.otherwise('/app/bluetooth');
 });
