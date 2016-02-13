@@ -13,6 +13,30 @@ angular.module('slamp.leds', ['ionic'])
 	
 	$scope.selected = null;
 
+	$scope.lampStatus = {
+    	mode: "",
+    	leds: []
+    }
+
+    $scope.$watch(
+    	'lampStatus.mode', 
+    	function(){
+    		LedsFactory.SetMode($scope.lampStatus.mode);
+    	}
+    );
+
+	$scope.initRandomLedCard = function(){
+		$scope.lampStatus.mode = LedsFactory.GetMode();
+	}
+
+	$scope.randomLedOn = function(){
+		LedsFactory.SwitchRandomLed(true, true);
+	}
+
+	$scope.randomLedOff = function(){
+		LedsFactory.SwitchRandomLed(false, false);
+	}
+
 	$scope.openLedControls = function(ledId){
 		$scope.lampModel = LedsFactory.GetModel();
 		LedsFactory.SelectLed(ledId);
@@ -55,6 +79,7 @@ angular.module('slamp.leds', ['ionic'])
 	$scope.isConnected = function(){
 		return bluetoothService.IsConnected();
 	}
+
 	$scope.isStandbyMode = function(){
 		return LedsFactory.IsStandbyMode();
 	}

@@ -106,6 +106,35 @@ angular.module('slamp.datafactory', ['ionic'])
 			return status;
 		}
 
+		,SwitchRandomLed: function(switchOn, randomRGB){
+			if(switchOn){
+				if(this.isAllOn()){
+					alert("all leds are on!");
+					return;
+				}
+				var led = this._getRandomLedByStatus("OFF");
+				led.status = "ON";
+				if(randomRGB){
+					led.r = Math.floor(Math.random()*255).toString();
+					led.g = Math.floor(Math.random()*255).toString();
+					led.b = Math.floor(Math.random()*255).toString();
+				}
+				bluetoothService.SendCommand(this.SerializeLed(led));
+			}else{
+				if(this.isAllOff()){
+					alert("all leds are off!");
+					return;
+				}
+				var led = this._getRandomLedByStatus("ON");
+				led.status = "OFF";
+				led.r = "0";
+				led.g = "0";
+				led.b = "0";
+				bluetoothService.SendCommand(this.SerializeLed(led));
+			}
+
+		}
+
 		,SwitchRandomSecret: function(){
 			if(this.isAllSecrets()){
 				alert("No more place for secrets!");
@@ -125,6 +154,21 @@ angular.module('slamp.datafactory', ['ionic'])
 			var statusStr = "*"+oLed.side+","+oLed.order+","+oLed.r+","+oLed.g+","+oLed.b;
 			return statusStr;
 		}
+
+
+		,_getRandomLedByStatus: function(status){
+			var oLed = this._getRandomLed();
+			if(status == "ON" && oLed.status == "ON"){
+				return oLed;
+			}
+			if(status == "OFF" && oLed.status == "OFF")
+			{
+				return oLed;
+			}
+			return this._getRandomLedByStatus(status);
+		}
+
+
 
 		,_findLed: function(ledId){
 			for(var i=0; i<this.lampModel.length; i++){
@@ -160,6 +204,16 @@ angular.module('slamp.datafactory', ['ionic'])
 					onCount++;
 			}
 			return onCount == this.lampModel.length;
+		}
+
+		,isAllOff: function(){
+			var offCount = 0;
+			for(var i=0; i<this.lampModel.length; i++){
+				var led = this.lampModel[i];
+				if(led.status == "OFF")
+					offCount++;
+			}
+			return offCount == this.lampModel.length;
 		}
 
 		,isAllSecrets: function(){

@@ -19,7 +19,7 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    console.debug("run auth");
+    console.debug("RUN GOOGLE AUTH");
     var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
     ref.addEventListener('loadstart', function(event) { 
       if((event.url).startsWith("http://localhost/callback")) {
@@ -86,6 +86,15 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
     views: {
       'menuContent': {
           templateUrl: 'templates/led.html',
+          controller: 'LedsCtrl'
+      }
+    }
+  })
+  .state('app.led_random', {
+    url: '/led_random',
+    views: {
+      'menuContent': {
+          templateUrl: 'templates/led_random.html',
           controller: 'LedsCtrl'
       }
     }
