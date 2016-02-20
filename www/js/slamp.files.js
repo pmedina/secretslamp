@@ -7,58 +7,29 @@ var clientSecret = "9m92Fhei0wB2XLaEha7pUFIT";
 angular.module('slamp.files', ['ionic'])
 
 .run(function($ionicPlatform, $http, filesService) {
-
-	// MOVED TO app start
-	/*console.debug("run auth");
-	// Open in external browser
- 	var ref = window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + clientId + '&redirect_uri=http://localhost/callback&scope=https://www.googleapis.com/auth/drive.file&response_type=code&access_type=online', '_blank', 'location=no');
-	ref.addEventListener('loadstart', function(event) { 
-	    if((event.url).startsWith("http://localhost/callback")) {
-	        requestToken = (event.url).split("code=")[1];
-	        console.debug("sending request");
-	        $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-			$http({method: "post", url: "https://accounts.google.com/o/oauth2/token", data: "client_id=" + clientId + "&client_secret=" + clientSecret + "&redirect_uri=http://localhost/callback" + "&grant_type=authorization_code" + "&code=" + requestToken })
-			.then(
-				function(response){
-					console.debug(response);
-					filesService.SetToken(response.data.access_token);
-				}
-				,function(data, status){
-					console.debug(data);
-					alert("ERROR: " + data);
-				}
-
-			)
-            ref.close();
-	    }
-	});
-	*/
 })
 
-.controller('FilesCtrl', function(bluetoothService, LedsFactory, filesService, cameraService, $scope, $ionicPlatform, $state, $ionicLoading) {
+.controller('FilesCtrl', function(LampstatusService, bluetoothService, LedsFactory, filesService, cameraService, $scope, $ionicPlatform, $state, $ionicLoading) {
 	
 
-	//$scope.files = [];
-    //$currentDir = null;
-    //$hasParent = false;
     $scope.lampStatus = {
-    	mode: "",
+    	mode: LampstatusService.getLampStatus(),
     	leds: []
     }
 
     $ionicPlatform.ready(function() {
-    
     })
 
     $scope.$watch(
     	'lampStatus.mode', 
     	function(){
-    		LedsFactory.SetMode($scope.lampStatus.mode);
+    		console.debug("changed mode: "+$scope.lampStatus.mode);
+    		LampstatusService.setLampStatus($scope.lampStatus.mode);
     	}
     );
 
     $scope.initSecretsCard = function(){
-		 $scope.lampStatus.mode = LedsFactory.GetMode();
+
     }
 
 	$scope.fromCamera = function()

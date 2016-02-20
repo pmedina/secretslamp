@@ -1,6 +1,21 @@
 angular.module('slamp.datafactory', ['ionic'])
 
-// pass data between views
+
+
+.service('LampstatusService', function(){
+	var lampMode = '#0';
+	return {
+        getLampStatus: function () {
+            return lampMode;
+        },
+        setLampStatus: function(value) {
+            lampMode = value;
+        }
+    };
+})
+
+
+
 .factory('LedsFactory', function(bluetoothService, $q){
 	return{
 		lampModel: [

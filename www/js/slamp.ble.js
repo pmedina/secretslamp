@@ -112,6 +112,11 @@ angular.module('slamp.ble', ['ionic'])
 				console.debug("Command wont be set. Not device connected");
 				return;
 			}
+
+			if(command === ""){
+				console.debug("Why would i send an empty command?");
+				return;
+			}
 				
 			
 			bluetoothSerial.write(

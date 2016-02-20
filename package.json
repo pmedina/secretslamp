@@ -1,7 +1,7 @@
 {
-  "name": "components",
+  "name": "slamp",
   "version": "1.1.1",
-  "description": "components: An Ionic project",
+  "description": "slamp. Your secrets. Your lamp",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",

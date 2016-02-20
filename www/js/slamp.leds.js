@@ -9,31 +9,42 @@ angular.module('slamp.leds', ['ionic'])
 /**
 *  LEDS CONTROLLER
 */
-.controller('LedsCtrl', function ($scope, $state, LedsFactory, bluetoothService) {
+.controller('LedsCtrl', function (LampstatusService, $scope, $state, LedsFactory, bluetoothService) {
 	
 	$scope.selected = null;
 
 	$scope.lampStatus = {
-    	mode: "",
+    	mode: LampstatusService.getLampStatus(),
     	leds: []
     }
 
     $scope.$watch(
     	'lampStatus.mode', 
     	function(){
-    		LedsFactory.SetMode($scope.lampStatus.mode);
+    		console.debug("changed mode: "+$scope.lampStatus.mode);
+    		LampstatusService.setLampStatus($scope.lampStatus.mode);
     	}
     );
 
 	$scope.initRandomLedCard = function(){
-		$scope.lampStatus.mode = LedsFactory.GetMode();
+		
 	}
 
 	$scope.randomLedOn = function(){
+		if(LampstatusService.getLampStatus() != "#0"){
+			console.debug("attempt control with secret mode on. Ignoring!");
+			alert("Lamp mode is set to secret. Disable the mode first!");
+			return;
+		}
 		LedsFactory.SwitchRandomLed(true, true);
 	}
 
 	$scope.randomLedOff = function(){
+		if(LampstatusService.getLampStatus() != "#0"){
+			console.debug("attempt control with secret mode on. Ignoring!");
+			alert("Lamp mode is set to secret. Disable the mode first!");
+			return;
+		}
 		LedsFactory.SwitchRandomLed(false, false);
 	}
 
