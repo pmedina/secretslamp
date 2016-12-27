@@ -2,7 +2,7 @@ angular.module('slamp.datafactory', ['ionic'])
 
 
 
-.service('LampstatusService', function(){
+.service('LampstatusService', function(LedsFactory){
 	var lampMode = '#0';
 	return {
         getLampStatus: function () {
@@ -10,6 +10,7 @@ angular.module('slamp.datafactory', ['ionic'])
         },
         setLampStatus: function(value) {
             lampMode = value;
+            LedsFactory.SetMode(value);
         }
     };
 })
@@ -119,6 +120,16 @@ angular.module('slamp.datafactory', ['ionic'])
 			var status = this._findLed(ledId).status;
 			console.debug(status);
 			return status;
+		}
+		,ResetLeds: function(){
+			for(var i= 0; i<this.lampModel.length; i++){
+				var theled = this.lampModel[i];
+				theled.status = "OFF";
+				theled.r = "0";
+				theled.g = "0";
+				theled.b = "0";
+			}
+			console.debug(this.lampModel);
 		}
 
 		,SwitchRandomLed: function(switchOn, randomRGB){

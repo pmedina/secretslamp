@@ -48,6 +48,15 @@ angular.module('slamp.leds', ['ionic'])
 		LedsFactory.SwitchRandomLed(false, false);
 	}
 
+	$scope.resetLeds = function(){
+		if(LampstatusService.getLampStatus() != "#0"){
+			console.debug("attempt control with secret mode on. Ignoring!");
+			alert("Lamp mode is set to secret. Disable the mode first!");
+			return;
+		}
+		LedsFactory.ResetLeds();
+	}
+
 	$scope.openLedControls = function(ledId){
 		$scope.lampModel = LedsFactory.GetModel();
 		LedsFactory.SelectLed(ledId);
@@ -71,7 +80,13 @@ angular.module('slamp.leds', ['ionic'])
 			$scope.selected.g = Math.floor(Math.random()*255).toString();
 			$scope.selected.b = Math.floor(Math.random()*255).toString();
 		}
+		//var command = $scope.SerializeCommand($scope.selected);
+		//bluetoothService.SendCommand(command);
+	}
+
+	$scope.submitLedStatus = function(){
 		var command = $scope.SerializeCommand($scope.selected);
+		console.debug(command);
 		bluetoothService.SendCommand(command);
 	}
 

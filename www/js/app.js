@@ -1,7 +1,6 @@
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 'slamp.leds', 'slamp.datafactory'])
@@ -62,16 +61,22 @@ angular.module('starter', ['ionic', 'slamp.leds', 'slamp.files', 'slamp.ble', 's
       }
     }
   })
-  /*.state('app.filebrowser', {
-    url: '/filebrowser',
+  .state('app.credits', {
+    url: '/credits',
     views: {
       'menuContent': {
-          templateUrl: 'templates/filebrowser.html',
-          controller: 'FilesCtrl'
+        templateUrl: 'templates/credits.html'
       }
     }
   })
-  */
+  .state('app.bonus_modes', {
+    url: '/bonus_modes',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/bonus_modes.html'
+      }
+    }
+  })
   .state('app.photobrowser', {
     url: '/photobrowser',
     views: {

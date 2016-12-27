@@ -27,6 +27,11 @@
 		    	<input type="range" name="blue" min="0" max="255" ng-model="selected.b" ng-change="changeStatus()" ng-disabled="isConnected() == false">
 		    	<i class="icon ion-ios-sunny-outline"></i>
 		  	</div>
+		  	<div class="item">
+		  		<a class="button button-block button-dark" href="javascript:void(0)" ng-click="submitLedStatus()"  ng-disabled="isConnected() == false">
+					Set
+				</a>
+		  	</div>
 		  	
 		</div>
 	</ion-content>

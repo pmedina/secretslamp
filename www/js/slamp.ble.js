@@ -61,6 +61,37 @@ angular.module('slamp.ble', ['ionic'])
 		isConnected: false
 		,connectedDevice: null
 		,devicesList: null
+		,commandsStack: []
+		,timer: null
+
+		,_onTimerEnd: function(){
+			console.debug("timer end. Starting over");
+			this.timer.start(10);
+		}
+
+		,_onTimerTick: function(ms){
+			if(this.commandsStack.length == 0)
+				return;
+			var command = this.commandsStack.shift();
+			console.debug("about to send:"+command);
+			this._doSendCommand(command);
+		}
+
+		,_doSendCommand: function(command){
+			if(typeof(bluetoothSerial) === 'undefined'){
+				console.debug("bluetooth serial not defined. Are you using a cellphone?")
+				return;
+			}
+			bluetoothSerial.write(
+				command, 
+				function(){
+					console.debug("BluetoothFactory.SendCommand() sent:"+command);
+				}, 
+				function(){
+					console.debug("BluetoothFactory.SendCommand() failed:"+command);
+				}
+			);
+		}
 
 		,Connect: function(device){
 			var deferred = $q.defer();
@@ -69,6 +100,19 @@ angular.module('slamp.ble', ['ionic'])
 				device.address, 
 				function(){
 					that.connectedDevice = device;
+					/*that.timer = new Timer({
+						tick    : 0.30,
+						ontick  : function(ms) { 
+							that._onTimerTick(ms);
+						},
+						onstart : function() { console.log('timer started') },
+						onstop  : function() { console.log('timer stop') },
+						onpause : function() { console.log('timer set on pause') },
+						onend   : function(){
+							that._onTimerEnd()
+						}
+					});
+					that.timer.start(10);*/
 					deferred.resolve();
 				},
 				function(failure){
@@ -100,14 +144,12 @@ angular.module('slamp.ble', ['ionic'])
 
 		}
 		,IsConnected: function(){
+			//return true; // If you are a developer, you will want this.
 			return this.connectedDevice != null;
 		}
 
 		,SendCommand: function(command){
 			
-			// TODO: Check if connected before attempt to send. 
-			// place a modal before and after
-			// TODO: bluetoothSerial.write(command, function(){}, function(){})
 			if(!this.IsConnected()){
 				console.debug("Command wont be set. Not device connected");
 				return;
@@ -117,17 +159,9 @@ angular.module('slamp.ble', ['ionic'])
 				console.debug("Why would i send an empty command?");
 				return;
 			}
-				
-			
-			bluetoothSerial.write(
-				command, 
-				function(){
-					console.debug("BluetoothFactory.SendCommand() sent:"+command);
-				}, 
-				function(){
-					console.debug("BluetoothFactory.SendCommand() failed:"+command);
-				}
-			);
+			// Store command in the stack
+			// this.commandsStack.push(command);
+			this._doSendCommand(command);
 		}
 
 	}

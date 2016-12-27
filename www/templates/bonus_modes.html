@@ -1,0 +1,21 @@
+<ion-view view-title="Lamp Modes" ng-controller="LedsCtrl">
+  <ion-content>
+    <div class="list card">
+      <div class="item">
+        <ion-toggle ng-true-value="'#0'" ng-model="lampStatus.mode" toggle-class="toggle-calm" ng-disabled="isConnected() == false">Free Mode</ion-toggle>
+      </div>
+      <div class="item">
+        <ion-toggle ng-true-value="'#1'" ng-false-value="'#0'" ng-model="lampStatus.mode" toggle-class="toggle-calm" ng-disabled="isConnected() == false">Secrets Mode</ion-toggle>
+      </div>
+      <div class="item">
+        <ion-toggle ng-true-value="'#2'" ng-model="lampStatus.mode" ng-false-value="'#0'" toggle-class="toggle-calm" ng-disabled="isConnected() == false">Surprise Mode</ion-toggle>
+      </div>
+      <div class="item">
+        <ion-toggle ng-true-value="'#3'" ng-model="lampStatus.mode" ng-false-value="'#0'" toggle-class="toggle-calm" ng-disabled="isConnected() == false">Sweep Mode</ion-toggle>
+      </div>
+      <div class="item">
+        <ion-toggle ng-true-value="'#6'" ng-model="lampStatus.mode" ng-false-value="'#0'" toggle-class="toggle-calm" ng-disabled="isConnected() == false">Rubik Mode</ion-toggle>
+      </div>
+    </div>  
+  </ion-content>
+</ion-view>

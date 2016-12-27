@@ -12,21 +12,9 @@ angular.module('slamp.files', ['ionic'])
 .controller('FilesCtrl', function(LampstatusService, bluetoothService, LedsFactory, filesService, cameraService, $scope, $ionicPlatform, $state, $ionicLoading) {
 	
 
-    $scope.lampStatus = {
-    	mode: LampstatusService.getLampStatus(),
-    	leds: []
-    }
-
     $ionicPlatform.ready(function() {
     })
 
-    $scope.$watch(
-    	'lampStatus.mode', 
-    	function(){
-    		console.debug("changed mode: "+$scope.lampStatus.mode);
-    		LampstatusService.setLampStatus($scope.lampStatus.mode);
-    	}
-    );
 
     $scope.initSecretsCard = function(){
 
@@ -34,7 +22,10 @@ angular.module('slamp.files', ['ionic'])
 
 	$scope.fromCamera = function()
 	{
-
+		if(LampstatusService.getLampStatus() != "#1"){
+			alert("Please set the lamp in Secrets mode first!");
+			return;
+		}
 		cameraService.GetPicture(0).then(
 			function(result){
 				console.debug(result);
